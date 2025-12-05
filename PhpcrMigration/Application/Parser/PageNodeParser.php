@@ -13,9 +13,15 @@ namespace Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Parser;
 
 use PHPCR\NodeInterface;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Persister\AbstractPersister;
+use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Service\LocaleDiscoveryService;
 
 class PageNodeParser implements NodeParserInterface
 {
+    public function __construct(
+        private readonly LocaleDiscoveryService $localeDiscoveryService,
+    ) {
+    }
+
     public function parse(NodeInterface $node, string $documentType): array
     {
         if (!$this->supports($node, $documentType)) {
@@ -60,11 +66,16 @@ class PageNodeParser implements NodeParserInterface
      */
     private function parseLocalizedRoutes(NodeInterface $node, array $localizations): array
     {
+        $discoveredLocales = $this->localeDiscoveryService->discoverLocales($node);
         foreach ($node->getReferences('sulu:content') as $reference) {
             $route = $reference->getParent();
             $routePath = $route->getPath();
             $locale = \explode('/', $routePath)[4];
             $slug = '/' . (\explode('/', $routePath, 6)[5] ?? '');
+
+            if (!isset($discoveredLocales[$locale])) {
+                continue;
+            }
 
             $historyReferences = $route->getReferences();
             $historyUrls = [];

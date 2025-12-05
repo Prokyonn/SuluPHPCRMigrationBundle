@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Persister;
 
+use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Exception\InvalidDocumentException;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Exception\UnsupportedDocumentTypeException;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Repository\EntityRepositoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -385,49 +386,55 @@ abstract class AbstractPersister implements PersisterInterface
             $localizedData['_seoData'] = $this->buildSeoData($localizedData);
             $localizedData['_excerptData'] = $this->buildExcerptData($localizedData);
 
-            $data = $this->mapDataViaMapping($localizedData, $this->getDimensionContentMapping());
-            $created = $document['sulu']['created'] ?? null;
-            $data['created'] = $created instanceof \DateTimeInterface ? $created->format('Y-m-d H:i:s') : null;
-            $changed = $document['sulu']['changed'] ?? null;
-            $data['changed'] = $changed instanceof \DateTimeInterface ? $changed->format('Y-m-d H:i:s') : null;
+            try {
+                $data = $this->mapDataViaMapping($localizedData, $this->getDimensionContentMapping());
+                $created = $document['sulu']['created'] ?? null;
+                $data['created'] = $created instanceof \DateTimeInterface ? $created->format('Y-m-d H:i:s') : null;
+                $changed = $document['sulu']['changed'] ?? null;
+                $data['changed'] = $changed instanceof \DateTimeInterface ? $changed->format('Y-m-d H:i:s') : null;
 
-            $data = \array_merge($this->getDefaultData(), $data);
-            $data = $this->mapDimensionContentData($document, $locale, $data, $isLive);
+                $data = \array_merge($this->getDefaultData(), $data);
+                $data = $this->mapDimensionContentData($document, $locale, $data, $isLive);
 
-            $data = $this->validateData($data);
+                $data = $this->validateData($data);
 
-            // remove known keys that do not belong to the templateData
-            $localizedData = $this->removeNonTemplateData($localizedData);
+                // remove known keys that do not belong to the templateData
+                $localizedData = $this->removeNonTemplateData($localizedData);
 
-            /** @var mixed[] $templateData */
-            $templateData = $data['templateData'] ?? [];
-            $data['templateData'] = \array_merge($localizedData, $templateData);
-            $data['templateData'] = $this->addBlockIds($data['templateData']);
+                /** @var mixed[] $templateData */
+                $templateData = $data['templateData'] ?? [];
+                $data['templateData'] = \array_merge($localizedData, $templateData);
+                $data['templateData'] = $this->addBlockIds($data['templateData']);
 
-            // SULU 3.0 MIGRATION FIX: Ensure ALL data is UTF-8 encoded (not just templateData)
-            // This fixes title, seoTitle, excerptTitle, excerptDescription, and all other string fields
-            $fixedData = $this->fixUtf8Encoding($data);
-            \assert(\is_array($fixedData));
-            $data = $fixedData;
+                // SULU 3.0 MIGRATION FIX: Ensure ALL data is UTF-8 encoded (not just templateData)
+                // This fixes title, seoTitle, excerptTitle, excerptDescription, and all other string fields
+                $fixedData = $this->fixUtf8Encoding($data);
+                \assert(\is_array($fixedData));
+                $data = $fixedData;
+            } catch (InvalidDocumentException $e) {
+                echo \sprintf(
+                    "Skipping dimension content for document with UUID '%s' and locale '%s': %s\n",
+                    $document['jcr']['uuid'],
+                    $locale ?? 'null',
+                    $e->getMessage()
+                );
+                continue;
+            }
 
             $data['version'] = 0;
 
             $entityIdMappingName = $this->getDimensionContentEntityIdMappingName();
 
-            try {
-                $this->entityRepository->insertOrUpdate(
-                    $data,
-                    $this->getDimensionContentTableName(),
-                    $this->getDimensionContentTableTypes(),
-                    [
-                        $entityIdMappingName => $data[$entityIdMappingName],
-                        'locale' => $locale,
-                        'stage' => $data['stage'],
-                    ],
-                );
-            } catch (\Exception $e) {
-                throw $e;
-            }
+            $this->entityRepository->insertOrUpdate(
+                $data,
+                $this->getDimensionContentTableName(),
+                $this->getDimensionContentTableTypes(),
+                [
+                    $entityIdMappingName => $data[$entityIdMappingName],
+                    'locale' => $locale,
+                    'stage' => $data['stage'],
+                ],
+            );
 
             /**
              * @var DimensionContent $dimensionContent

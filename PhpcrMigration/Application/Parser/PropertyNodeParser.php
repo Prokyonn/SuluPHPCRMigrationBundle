@@ -14,12 +14,14 @@ namespace Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Parser;
 use Jackalope\Property;
 use PHPCR\NodeInterface;
 use PHPCR\PropertyInterface;
+use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Service\LocaleDiscoveryService;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class PropertyNodeParser implements NodeParserInterface
 {
     public function __construct(
         private readonly PropertyAccessorInterface $propertyAccessor,
+        private readonly LocaleDiscoveryService $localeDiscoveryService,
     ) {
     }
 
@@ -43,8 +45,9 @@ class PropertyNodeParser implements NodeParserInterface
             'sulu' => [],
             'jcr' => [],
         ];
+        $discoveredLocales = $this->localeDiscoveryService->discoverLocales($node);
         foreach ($node->getProperties() as $property) {
-            $document = $this->parseProperty($property, $document);
+            $document = $this->parseProperty($property, $document, $discoveredLocales);
         }
 
         /** @var array<string, array<string, mixed>> $localizations */
@@ -87,14 +90,15 @@ class PropertyNodeParser implements NodeParserInterface
 
     /**
      * @param mixed[] $document
+     * @param string[] $knownLocales
      *
      * @return mixed[]
      */
-    private function parseProperty(PropertyInterface $property, array $document): array
+    private function parseProperty(PropertyInterface $property, array $document, array $knownLocales): array
     {
         $name = $property->getName();
         $value = $this->resolvePropertyValue($property);
-        $propertyPath = $this->getLocalizedPath($name);
+        $propertyPath = $this->getLocalizedPath($name, $knownLocales);
         $propertyPath = $this->getPropertyPath($propertyPath, $name);
 
         $this->propertyAccessor->setValue(
@@ -121,17 +125,25 @@ class PropertyNodeParser implements NodeParserInterface
         return $value;
     }
 
-    private function getLocalizedPath(string &$name): string
+    /**
+     * @param string[] $locales
+     */
+    private function getLocalizedPath(string &$name, array $locales = []): string
     {
         $propertyPath = '';
         if (\str_starts_with($name, 'i18n:')) {
-            $localizationOffset = 5;
-            $firstDashPosition = \strpos($name, '-', $localizationOffset);
-            $locale = \substr($name, 5, $firstDashPosition - $localizationOffset);
-            $propertyPath .= '[localizations][' . $locale . ']';
-            $name = \substr($name, $firstDashPosition + 1);
+            $afterPrefix = \substr($name, 5);
+
+            foreach ($locales as $locale) {
+                if (\str_starts_with($afterPrefix, $locale . '-')) {
+                    $propertyPath = '[localizations][' . $locale . ']';
+                    $name = \substr($afterPrefix, \strlen($locale) + 1);
+
+                    return $propertyPath;
+                }
+            }
         } elseif ($this->isUnLocalizedProperty($name)) {
-            $propertyPath .= '[localizations][null]';
+            $propertyPath = '[localizations][null]';
         }
 
         return $propertyPath;

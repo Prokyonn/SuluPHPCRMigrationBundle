@@ -15,13 +15,16 @@ use PHPCR\NodeInterface;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Exception\LegacyRouteTableNotFoundException;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Persister\AbstractPersister;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Repository\EntityRepositoryInterface;
+use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Service\LocaleDiscoveryService;
 
 class ArticleNodeParser implements NodeParserInterface
 {
     public const LEGACY_ROUTE_TABLE = 'ro_routes_old';
 
-    public function __construct(private readonly EntityRepositoryInterface $repository)
-    {
+    public function __construct(
+        private readonly EntityRepositoryInterface $repository,
+        private readonly LocaleDiscoveryService $localeDiscoveryService,
+    ) {
     }
 
     public function parse(NodeInterface $node, string $documentType): array
@@ -71,6 +74,7 @@ class ArticleNodeParser implements NodeParserInterface
             ]
         );
 
+        $discoveredLocales = $this->localeDiscoveryService->discoverLocales($node);
         foreach ($routes as $route) {
             if (!\is_array($route)) {
                 continue;
@@ -79,7 +83,7 @@ class ArticleNodeParser implements NodeParserInterface
             $locale = $route['locale'] ?? null;
             $url = $route['path'] ?? null;
 
-            if ($locale && $url) {
+            if ($locale && $url && isset($discoveredLocales[$locale])) {
                 match ((bool) ($route['history'] ?? false)) {
                     true => $localizations[$locale][AbstractPersister::HISTORY_URLS][] = $url,
                     false => $localizations[$locale][AbstractPersister::URL] = $url,

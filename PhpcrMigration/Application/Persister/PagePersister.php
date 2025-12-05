@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Persister;
 
+use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Exception\InvalidDocumentException;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Exception\InvalidPathException;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Repository\EntityRepositoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -113,6 +114,14 @@ class PagePersister extends AbstractPersister
             $shadowBase = $localizations[$localeKey]['shadow-base'] ?? null;
             $data['shadowLocale'] = ($shadowOn && \is_string($shadowBase)) ? $shadowBase : null;
             $data['shadowLocales'] = null;
+
+            if (isset($data['shadowLocale'])) {
+                $shadowTemplateKey = $document['localizations'][$locale]['template'] ?? null;
+                if (null === $shadowTemplateKey) {
+                    throw new InvalidDocumentException('Template key of shadow locale is missing.');
+                }
+                $data['templateKey'] = $shadowTemplateKey;
+            }
 
             return $data;
         }
