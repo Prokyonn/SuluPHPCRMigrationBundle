@@ -217,11 +217,7 @@ class EntityRepository implements EntityRepositoryInterface, ResetInterface
         $data['rgt'] = $parentRgt + 1;
         $data['depth'] = $parentDepth + 1;
 
-        try {
-            $this->connection->insert($tableName, $data, $types);
-        } catch (\Exception $e) {
-            throw new \RuntimeException('Failed to insert child node: ' . $e->getMessage(), 0, $e);
-        }
+        $this->connection->insert($tableName, $data, $types);
     }
 
     private function getNextIdValue(string $tableName): ?int
