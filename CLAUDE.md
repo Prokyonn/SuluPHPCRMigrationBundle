@@ -194,92 +194,14 @@ vendor/bin/phpunit --testsuite=Unit # Unit tests only
 
 ### Functional Test Fixtures
 
-Functional tests run against MySQL with JSON baselines for regression detection.
+Functional tests run against MySQL and PostgreSQL with JSON baselines for regression detection.
 
-**Directory Structure:**
-```
-Tests/
-├── Application/
-│   ├── sulu26/              # Optional: Sulu 2.6 for creating content
-│   └── sulu30/              # Optional: Sulu 3.0 for schema extraction
-├── Functional/
-│   ├── Fixture/
-│   │   └── TestFixtureBuilder.php  # Auto-builds test_fixture.sql
-│   └── Helper/
-│       └── JsonBaselineExporter.php # Exports tables to JSON
-├── Resources/
-│   ├── fixtures/
-│   │   ├── sulu26_dump.sql      # Sulu 2.6 database dump
-│   │   ├── sulu30_schema.sql    # Sulu 3.0 schema (no data)
-│   │   └── test_fixture.sql     # Combined fixture (auto-generated)
-│   └── baselines/
-│       └── *.json               # Expected migration output
-```
-
-**Note:** The `sulu26/` and `sulu30/` skeleton applications are **optional** and only needed when:
-- Creating new test content or reproducing edge cases (sulu26)
-- Updating schema after Sulu 3.0 changes (sulu30)
-
-Existing test fixtures (`test_fixture.sql` and `*.json` baselines) are committed to the repository and work out-of-the-box for CI and local testing.
-
-**Workflow: Adding Test Data**
-
-1. Set up Sulu 2.6 skeleton with your MySQL:
-   ```bash
-   cd Tests/Application/sulu26
-   composer install
-   # Configure .env.local with DATABASE_URL
-   php bin/adminconsole sulu:build dev
-   ```
-
-2. Create content via Sulu admin
-
-3. Export database:
-   ```bash
-   mysqldump -u root -p sulu26_test > Tests/Resources/fixtures/sulu26_dump.sql
-   ```
-
-4. Run tests (fixture is auto-rebuilt when source files change):
-   ```bash
-   composer test
-   ```
-
-   To regenerate baselines after migration changes, delete existing baselines first:
-   ```bash
-   rm Tests/Resources/baselines/*.json
-   composer test
-   ```
-
-**Workflow: Updating Sulu 3.0 Schema**
-
-1. Set up Sulu 3.0 skeleton:
-   ```bash
-   cd Tests/Application/sulu30
-   composer install
-   # Configure .env.local with DATABASE_URL
-   php bin/console doctrine:schema:create
-   ```
-
-2. Export schema:
-   ```bash
-   mysqldump -u root -p --no-data sulu30_schema > Tests/Resources/fixtures/sulu30_schema.sql
-   ```
-
-3. Run tests (fixture is auto-rebuilt when schema file changes):
-   ```bash
-   composer test
-   ```
-
-**Running Tests Locally**
-
-Tests require MySQL. Set environment variables:
-```bash
-export DATABASE_HOST=127.0.0.1
-export DATABASE_USER=root
-export DATABASE_PASSWORD=
-export DATABASE_NAME=sulu_migration_test
-composer test
-```
+See **[docs/TESTING.md](docs/TESTING.md)** for comprehensive documentation on:
+- Test data flow and architecture
+- Running tests locally (MySQL and PostgreSQL)
+- Adding new test content
+- Updating Sulu 3.0 schema
+- Baseline comparison details
 
 ## Common Development Patterns
 

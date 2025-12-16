@@ -108,11 +108,8 @@ class EntityRepository implements EntityRepositoryInterface, ResetInterface
 
     public function tableExists(string $tableName): bool
     {
-        // Bypass Doctrine's schema_filter which excludes ro_routes_old
-        $databaseName = $this->connection->getDatabase();
-        $sql = 'SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?';
-
-        return false !== $this->connection->fetchOne($sql, [$databaseName, $tableName]);
+        // tablesExist() for DBAL 3.x compatibility (tableExists() was added in DBAL 4.0)
+        return $this->connection->createSchemaManager()->tablesExist([$tableName]);
     }
 
     /**
