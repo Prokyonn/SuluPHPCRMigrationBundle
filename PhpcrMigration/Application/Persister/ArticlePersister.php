@@ -63,14 +63,12 @@ class ArticlePersister extends AbstractPersister
             $data['templateData']['title'] = $data['title'];
         }
 
-        if (isset($document['localizations'][$locale]['routePathName']) && isset($document['localizations'][$locale]['routePath'])) {
-            $routePathName = $document['localizations'][$locale]['routePathName'];
-            $routePathName = \str_starts_with($routePathName, 'i18n:') ? \explode('-', $routePathName, 2)[1] : $routePathName;
-            // check routePathName property and fallback to routePath
-            $routePath = $document['localizations'][$locale][$routePathName] ?? $document['localizations'][$locale]['routePath'];
-
-            // content bundle is only compatible with "url"
-            $data['templateData']['url'] = $routePath; // is used in the content bundle
+        if (null !== $locale && isset($document['localizations'][$locale])) {
+            $url = $this->resolveLocalizedUrl($document['localizations'][$locale]);
+            if (null !== $url) {
+                // content bundle is only compatible with "url"
+                $data['templateData']['url'] = $url; // is used in the content bundle
+            }
         }
 
         // Transform segments map to single segment value
@@ -219,31 +217,71 @@ class ArticlePersister extends AbstractPersister
     {
         $localizedData = $document['localizations'][$locale];
 
-        // Check if both routePath and routePathName are missing
-        if (!isset($localizedData['routePath']) && !isset($localizedData['routePathName'])) {
-            throw new RoutePathNameNotFoundException($document['jcr']['uuid'], $locale);
-        }
-
-        // If routePathName is set, use it to find the route property
         if (isset($localizedData['routePathName'])) {
             $routePathName = $localizedData['routePathName'];
-            // Handle i18n prefix (e.g., 'i18n:en-routePath' -> 'routePath')
             $routePathName = \str_starts_with($routePathName, 'i18n:')
                 ? \explode('-', $routePathName, 2)[1]
                 : $routePathName;
 
             $routePath = $localizedData[$routePathName] ?? null;
-            if (!\is_string($routePath)) {
-                throw new InvalidPathException($routePathName);
+            if (\is_string($routePath)) {
+                return $routePath;
             }
 
+            $legacyUrl = $localizedData[AbstractPersister::URL] ?? null;
+            if (\is_string($legacyUrl)) {
+                return $legacyUrl;
+            }
+
+            throw new InvalidPathException($routePathName);
+        }
+
+        $routePath = $localizedData['routePath'] ?? null;
+        if (\is_string($routePath)) {
             return $routePath;
         }
 
-        // At this point routePath must exist (we checked above)
-        \assert(isset($localizedData['routePath']));
+        $legacyUrl = $localizedData[AbstractPersister::URL] ?? null;
+        if (\is_string($legacyUrl)) {
+            return $legacyUrl;
+        }
 
-        return $localizedData['routePath'];
+        if (null === $routePath) {
+            throw new RoutePathNameNotFoundException($document['jcr']['uuid'], $locale);
+        }
+
+        throw new InvalidPathException('routePath');
+    }
+
+    /**
+     * @param array<string, mixed> $localizedData
+     */
+    private function resolveLocalizedUrl(array $localizedData): ?string
+    {
+        if (isset($localizedData['routePathName'])) {
+            $routePathName = $localizedData['routePathName'];
+            $routePathName = \str_starts_with($routePathName, 'i18n:')
+                ? \explode('-', $routePathName, 2)[1]
+                : $routePathName;
+
+            $routePath = $localizedData[$routePathName] ?? null;
+            if (\is_string($routePath)) {
+                return $routePath;
+            }
+
+            $legacyUrl = $localizedData[AbstractPersister::URL] ?? null;
+
+            return \is_string($legacyUrl) ? $legacyUrl : null;
+        }
+
+        $routePath = $localizedData['routePath'] ?? null;
+        if (\is_string($routePath)) {
+            return $routePath;
+        }
+
+        $legacyUrl = $localizedData[AbstractPersister::URL] ?? null;
+
+        return \is_string($legacyUrl) ? $legacyUrl : null;
     }
 
     protected function getParentId(array $document, string $locale): ?string
