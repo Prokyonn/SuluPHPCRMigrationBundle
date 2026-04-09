@@ -173,6 +173,7 @@ class PagePersister extends AbstractPersister
             $targetUuid = $localization['internal_link'] ?? null;
             $data['linkProvider'] = 'page'; // Sulu 2.6 did only support 'page' as internal link provider
             $data['linkData'] = null !== $targetUuid ? [
+                'provider' => 'page',
                 'href' => $targetUuid,
                 'locale' => $locale,
             ] : null;
@@ -181,6 +182,7 @@ class PagePersister extends AbstractPersister
             $externalUrl = $localization['external'] ?? null;
             $data['linkProvider'] = 'external';
             $data['linkData'] = null !== $externalUrl ? [
+                'provider' => 'external',
                 'href' => $externalUrl,
                 'locale' => $locale,
             ] : null;
