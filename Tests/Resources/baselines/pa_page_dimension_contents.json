@@ -589,12 +589,12 @@
         "id": 8,
         "idUsersChanger": "",
         "idUsersCreator": "",
-        "lastModified": "2025-12-09 10:54:13",
+        "lastModified": "2025-12-09 10:54:03",
         "linkData": "",
         "linkProvider": "",
         "locale": "en",
         "pageUuid": "c32200c7-1402-41ea-aff9-e19cf37f5f91",
-        "route_id": 5,
+        "route_id": 6,
         "seoData": {
             "canonicalUrl": "this is my canonical",
             "description": "Seo Description",
@@ -684,12 +684,12 @@
                 }
             ],
             "changed": {
-                "date": "2025-12-09 10:54:13.198000",
+                "date": "2025-12-09 10:54:03.516000",
                 "timezone": "+00:00",
                 "timezone_type": 1
             },
             "created": {
-                "date": "2025-12-09 10:42:48.978000",
+                "date": "2025-12-09 10:44:07.201000",
                 "timezone": "+00:00",
                 "timezone_type": 1
             },
@@ -701,14 +701,14 @@
             ],
             "sidebarSnippet": "0f628bb6-b4c7-4dc5-9c57-df2d6f4cca03",
             "subtitle": "Example subtitle",
-            "title": "Example Page 1",
-            "url": "/example-page-1-1"
+            "title": "Example Page with shadow",
+            "url": "/example-page-1-1-1"
         },
         "templateKey": "default",
-        "title": "Example Page 1",
+        "title": "Example Page with shadow",
         "version": 0,
         "workflowPlace": "published",
-        "workflowPublished": "2025-12-09 10:54:13"
+        "workflowPublished": "2025-12-09 10:54:03"
     },
     {
         "author_id": 1,
@@ -1252,7 +1252,7 @@
         "availableLocales": [
             "de"
         ],
-        "changed": "2026-03-31 11:45:41",
+        "changed": "2026-04-10 21:51:50",
         "created": "2025-12-11 22:03:04",
         "excerptData": {
             "description": null,
@@ -1295,7 +1295,7 @@
         "author_id": 1,
         "authored": "2025-12-11 22:03:04",
         "availableLocales": "",
-        "changed": "2026-03-31 11:45:41",
+        "changed": "2026-04-10 21:51:50",
         "created": "2025-12-11 22:03:04",
         "excerptData": {
             "description": "",
@@ -1551,7 +1551,8 @@
         "lastModified": "2025-12-09 10:53:04",
         "linkData": {
             "href": "http://sulu.io",
-            "locale": "de"
+            "locale": "de",
+            "provider": "external"
         },
         "linkProvider": "external",
         "locale": "de",
@@ -1862,7 +1863,8 @@
         "lastModified": "2025-12-09 10:53:25",
         "linkData": {
             "href": "16060395-4bbf-4e1d-9c8e-fe5265890c99",
-            "locale": "de"
+            "locale": "de",
+            "provider": "page"
         },
         "linkProvider": "page",
         "locale": "de",
@@ -2740,12 +2742,12 @@
         "id": 38,
         "idUsersChanger": "",
         "idUsersCreator": "",
-        "lastModified": "2025-12-09 10:54:13",
+        "lastModified": "2025-12-09 10:54:03",
         "linkData": "",
         "linkProvider": "",
         "locale": "en",
         "pageUuid": "c32200c7-1402-41ea-aff9-e19cf37f5f91",
-        "route_id": 5,
+        "route_id": 6,
         "seoData": {
             "canonicalUrl": "this is my canonical",
             "description": "Seo Description",
@@ -2835,12 +2837,12 @@
                 }
             ],
             "changed": {
-                "date": "2025-12-09 10:54:13.198000",
+                "date": "2025-12-09 10:54:03.516000",
                 "timezone": "+00:00",
                 "timezone_type": 1
             },
             "created": {
-                "date": "2025-12-09 10:42:48.978000",
+                "date": "2025-12-09 10:44:07.201000",
                 "timezone": "+00:00",
                 "timezone_type": 1
             },
@@ -2852,14 +2854,14 @@
             ],
             "sidebarSnippet": "0f628bb6-b4c7-4dc5-9c57-df2d6f4cca03",
             "subtitle": "Example subtitle",
-            "title": "Example Page 1",
-            "url": "/example-page-1-1"
+            "title": "Example Page with shadow",
+            "url": "/example-page-1-1-1"
         },
         "templateKey": "default",
-        "title": "Example Page 1",
+        "title": "Example Page with shadow",
         "version": 0,
         "workflowPlace": "published",
-        "workflowPublished": "2025-12-09 10:54:13"
+        "workflowPublished": "2025-12-09 10:54:03"
     },
     {
         "author_id": "",
@@ -3258,7 +3260,7 @@
         "availableLocales": [
             "de"
         ],
-        "changed": "2026-03-31 11:45:41",
+        "changed": "2026-04-10 21:51:50",
         "created": "2025-12-11 22:03:04",
         "excerptData": {
             "description": null,
@@ -3301,7 +3303,7 @@
         "author_id": 1,
         "authored": "2025-12-11 22:03:04",
         "availableLocales": "",
-        "changed": "2026-03-31 11:45:41",
+        "changed": "2026-04-10 21:51:50",
         "created": "2025-12-11 22:03:04",
         "excerptData": {
             "description": "",
@@ -3451,7 +3453,8 @@
         "lastModified": "2025-12-09 10:53:04",
         "linkData": {
             "href": "http://sulu.io",
-            "locale": "de"
+            "locale": "de",
+            "provider": "external"
         },
         "linkProvider": "external",
         "locale": "de",
@@ -3662,7 +3665,8 @@
         "lastModified": "2025-12-09 10:53:25",
         "linkData": {
             "href": "16060395-4bbf-4e1d-9c8e-fe5265890c99",
-            "locale": "de"
+            "locale": "de",
+            "provider": "page"
         },
         "linkProvider": "page",
         "locale": "de",

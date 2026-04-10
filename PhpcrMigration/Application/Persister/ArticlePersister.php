@@ -59,13 +59,17 @@ class ArticlePersister extends AbstractPersister
     protected function mapDimensionContentData(array $document, ?string $locale, array $data, bool $isLive): array
     {
         $data = parent::mapDimensionContentData($document, $locale, $data, $isLive);
+        $data = $this->mapShadowLocaleData($document, $locale, $data);
 
         $data[$this->getDimensionContentEntityIdMappingName()] = $document['jcr']['uuid'];
         $data['locale'] = $locale;
         $data['stage'] = $isLive ? 'live' : 'draft';
         $data['workflowPlace'] = 2 === ($data['workflowPlace'] ?? null) ? 'published' : 'draft';
 
-        if (isset($data['title'])) {
+        /** @var array<string, mixed> $templateData */
+        $templateData = $data['templateData'] ?? [];
+
+        if (isset($data['title']) && \is_scalar($data['title'])) {
             $title = (string) $data['title'];
 
             if (\strlen($title) > TitleTooLongException::MAX_LENGTH) {
@@ -73,7 +77,7 @@ class ArticlePersister extends AbstractPersister
             }
 
             $data['title'] = $title;
-            $data['templateData']['title'] = $title;
+            $templateData['title'] = $title;
         }
 
         if (null !== $locale && isset($document['localizations'][$locale])) {
@@ -81,9 +85,11 @@ class ArticlePersister extends AbstractPersister
 
             if (null !== $url) {
                 // content bundle is only compatible with "url"
-                $data['templateData']['url'] = $url;
+                $templateData['url'] = $url;
             }
         }
+
+        $data['templateData'] = $templateData;
 
         // Transform segments map to single segment value
         // For articles, take the first segment value from the map
