@@ -1,51 +1,37 @@
 [
     {
-        "changed": "2025-12-09 15:13:36",
         "created": "2025-12-09 15:12:10",
         "idUsersChanger": 1,
-        "idUsersCreator": 1,
-        "uuid": "52634b61-09b3-4224-a428-4a885dceb98f"
+        "idUsersCreator": 1
     },
     {
-        "changed": "2026-04-14 08:23:59",
         "created": "2026-04-14 08:23:59",
         "idUsersChanger": "",
-        "idUsersCreator": "",
-        "uuid": "73bb3e17-3d33-46d0-bbc9-62229b343dd4"
+        "idUsersCreator": ""
     },
     {
-        "changed": "2026-04-30 06:32:07",
         "created": "2026-04-30 06:32:07",
         "idUsersChanger": 1,
-        "idUsersCreator": 1,
-        "uuid": "805c4498-81e7-44f0-8e1e-fbf3038a4b8d"
+        "idUsersCreator": 1
     },
     {
-        "changed": "2026-05-12 07:45:27",
         "created": "2026-05-12 07:45:27",
         "idUsersChanger": "",
-        "idUsersCreator": "",
-        "uuid": "a30f6550-40aa-4af1-8225-785359384dba"
+        "idUsersCreator": ""
     },
     {
-        "changed": "2026-03-05 13:51:33",
         "created": "2026-03-05 13:51:33",
         "idUsersChanger": 1,
-        "idUsersCreator": 1,
-        "uuid": "b5224d7b-b780-419b-9faf-7ff991bf6b3f"
+        "idUsersCreator": 1
     },
     {
-        "changed": "2026-04-14 07:27:21",
         "created": "2026-04-14 07:27:20",
         "idUsersChanger": "",
-        "idUsersCreator": "",
-        "uuid": "beca5871-758e-4999-8821-6a0a09ab6d80"
+        "idUsersCreator": ""
     },
     {
-        "changed": "2026-05-08 00:11:15",
         "created": "2026-05-08 00:11:15",
         "idUsersChanger": "",
-        "idUsersCreator": "",
-        "uuid": "d1124790-b73f-445a-b092-7905f5fe592a"
+        "idUsersCreator": ""
     }
 ]

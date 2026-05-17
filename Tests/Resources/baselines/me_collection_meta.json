@@ -1,84 +1,72 @@
 [
     {
         "description": "",
-        "id": 1,
         "idCollections": 1,
         "locale": "en",
         "title": "System"
     },
     {
         "description": "",
-        "id": 2,
         "idCollections": 2,
         "locale": "en",
         "title": "Sulu media"
     },
     {
         "description": "",
-        "id": 3,
         "idCollections": 2,
         "locale": "de",
         "title": "Sulu Medien"
     },
     {
         "description": "",
-        "id": 4,
         "idCollections": 3,
         "locale": "en",
         "title": "Preview images"
     },
     {
         "description": "",
-        "id": 5,
         "idCollections": 3,
         "locale": "de",
         "title": "Vorschaubilder"
     },
     {
         "description": "",
-        "id": 6,
         "idCollections": 4,
         "locale": "en",
         "title": "Sulu contacts"
     },
     {
         "description": "",
-        "id": 7,
         "idCollections": 4,
         "locale": "de",
         "title": "Sulu Kontakte"
     },
     {
         "description": "",
-        "id": 8,
         "idCollections": 5,
         "locale": "en",
         "title": "People"
     },
     {
         "description": "",
-        "id": 9,
         "idCollections": 5,
         "locale": "de",
         "title": "Personen"
     },
     {
         "description": "",
-        "id": 10,
         "idCollections": 6,
         "locale": "en",
         "title": "Organizations"
     },
     {
         "description": "",
-        "id": 11,
         "idCollections": 6,
         "locale": "de",
         "title": "Organisationen"
     },
     {
         "description": "",
-        "id": 12,
         "idCollections": 7,
         "locale": "de",
         "title": "Example Collection"

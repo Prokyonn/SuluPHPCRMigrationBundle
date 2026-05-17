@@ -30,20 +30,12 @@ class JsonBaselineExporter
     ];
 
     /**
-     * Non-deterministic fields stripped from decoded JSON values at export time
-     * to keep baselines stable across runs.
+     * Fields stripped from rows and recursively from decoded JSON values.
+     * Any field whose name ends with `_id` is also stripped (foreign keys).
+     * Keeps baselines focused on data that drives test assertions and
+     * prevents auto-increment / generated-uuid churn from polluting PR diffs.
      */
-    private const NON_DETERMINISTIC_JSON_FIELDS = ['_id'];
-
-    /**
-     * Non-deterministic columns excluded per table at export time.
-     * These are generated values (e.g. via uniqid()) that change on every run.
-     *
-     * @var array<string, list<string>>
-     */
-    private const NON_DETERMINISTIC_COLUMNS = [
-        'sn_snippet_area' => ['uuid'],
-    ];
+    private const EXCLUDED_FIELDS = ['_id', 'id', 'uuid', 'changed'];
 
     public function __construct(
         private readonly Connection $connection,
@@ -77,21 +69,12 @@ class JsonBaselineExporter
         $quotedTable = $this->connection->quoteIdentifier($table);
         $rows = $this->connection->fetchAllAssociative("SELECT * FROM {$quotedTable}{$orderBy}");
 
-        $excludedColumns = self::NON_DETERMINISTIC_COLUMNS[$table] ?? [];
-
         $normalizedRows = \array_map(
-            function(array $row) use ($excludedColumns): array {
-                foreach ($excludedColumns as $column) {
-                    unset($row[$column]);
-                }
-
-                return $this->sortKeys(
-                    \array_map(
-                        fn (mixed $value): mixed => $this->normalizeValue($value),
-                        $row
-                    )
-                );
-            },
+            fn (array $row): array => $this->sortKeys(
+                $this->filterExcludedFields(
+                    \array_map(fn (mixed $value): mixed => $this->normalizeValue($value), $row)
+                )
+            ),
             $rows
         );
 
@@ -143,7 +126,7 @@ class JsonBaselineExporter
         if ('{' === $value[0] || '[' === $value[0]) {
             $decoded = \json_decode($value, true);
             if (\is_array($decoded)) {
-                return $this->removeNonDeterministicFields($decoded);
+                return $this->filterExcludedFields($decoded);
             }
         }
 
@@ -155,24 +138,33 @@ class JsonBaselineExporter
      *
      * @return array<string|int, mixed>
      */
-    private function removeNonDeterministicFields(array $data): array
+    private function filterExcludedFields(array $data): array
     {
         $result = [];
         foreach ($data as $key => $value) {
-            if (\is_string($key) && \in_array($key, self::NON_DETERMINISTIC_JSON_FIELDS, true)) {
+            if (\is_string($key) && $this->isExcludedField($key)) {
                 continue;
             }
 
-            $result[$key] = \is_array($value) ? $this->removeNonDeterministicFields($value) : $value;
+            $result[$key] = \is_array($value) ? $this->filterExcludedFields($value) : $value;
         }
 
         return $result;
     }
 
+    private function isExcludedField(string $key): bool
+    {
+        if (\in_array($key, self::EXCLUDED_FIELDS, true)) {
+            return true;
+        }
+
+        return \str_ends_with($key, '_id');
+    }
+
     /**
-     * @param array<string, mixed> $data
+     * @param array<string|int, mixed> $data
      *
-     * @return array<string, mixed>
+     * @return array<string|int, mixed>
      */
     private function sortKeys(array $data): array
     {

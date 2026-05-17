@@ -1,11 +1,9 @@
 [
     {
         "category_key": "root",
-        "changed": "2025-12-09 10:36:47",
         "created": "2025-12-09 10:36:47",
         "default_locale": "de",
         "depth": 0,
-        "id": 1,
         "idCategoriesParent": "",
         "idUsersChanger": 1,
         "idUsersCreator": 1,
@@ -14,11 +12,9 @@
     },
     {
         "category_key": "child-1",
-        "changed": "2025-12-09 10:36:56",
         "created": "2025-12-09 10:36:56",
         "default_locale": "de",
         "depth": 1,
-        "id": 2,
         "idCategoriesParent": 1,
         "idUsersChanger": 1,
         "idUsersCreator": 1,
@@ -27,11 +23,9 @@
     },
     {
         "category_key": "child-2",
-        "changed": "2025-12-09 10:37:03",
         "created": "2025-12-09 10:37:03",
         "default_locale": "de",
         "depth": 1,
-        "id": 3,
         "idCategoriesParent": 1,
         "idUsersChanger": 1,
         "idUsersCreator": 1,
@@ -40,11 +34,9 @@
     },
     {
         "category_key": "child-of-child-1",
-        "changed": "2025-12-09 10:37:44",
         "created": "2025-12-09 10:37:17",
         "default_locale": "de",
         "depth": 2,
-        "id": 4,
         "idCategoriesParent": 2,
         "idUsersChanger": 1,
         "idUsersCreator": 1,

@@ -1,14 +1,11 @@
 [
     {
-        "id": 1,
         "name": "sulu_contact.work"
     },
     {
-        "id": 2,
         "name": "sulu_contact.private"
     },
     {
-        "id": 3,
         "name": "sulu_contact.mobile"
     }
 ]

@@ -1,10 +1,8 @@
 [
     {
-        "changed": "2025-12-09 09:37:46",
         "collection_key": "system_collections",
         "created": "2025-12-09 09:37:46",
         "depth": 0,
-        "id": 1,
         "idCollectionTypes": 2,
         "idCollectionsMetaDefault": 1,
         "idCollectionsParent": "",
@@ -15,11 +13,9 @@
         "style": ""
     },
     {
-        "changed": "2025-12-09 09:37:46",
         "collection_key": "sulu_media",
         "created": "2025-12-09 09:37:46",
         "depth": 1,
-        "id": 2,
         "idCollectionTypes": 2,
         "idCollectionsMetaDefault": 2,
         "idCollectionsParent": 1,
@@ -30,11 +26,9 @@
         "style": ""
     },
     {
-        "changed": "2025-12-09 09:37:46",
         "collection_key": "sulu_media.preview_image",
         "created": "2025-12-09 09:37:46",
         "depth": 2,
-        "id": 3,
         "idCollectionTypes": 2,
         "idCollectionsMetaDefault": 4,
         "idCollectionsParent": 2,
@@ -45,11 +39,9 @@
         "style": ""
     },
     {
-        "changed": "2025-12-09 09:37:46",
         "collection_key": "sulu_contact",
         "created": "2025-12-09 09:37:46",
         "depth": 1,
-        "id": 4,
         "idCollectionTypes": 2,
         "idCollectionsMetaDefault": 6,
         "idCollectionsParent": 1,
@@ -60,11 +52,9 @@
         "style": ""
     },
     {
-        "changed": "2025-12-09 09:37:46",
         "collection_key": "sulu_contact.contact",
         "created": "2025-12-09 09:37:46",
         "depth": 2,
-        "id": 5,
         "idCollectionTypes": 2,
         "idCollectionsMetaDefault": 8,
         "idCollectionsParent": 4,
@@ -75,11 +65,9 @@
         "style": ""
     },
     {
-        "changed": "2025-12-09 09:37:46",
         "collection_key": "sulu_contact.account",
         "created": "2025-12-09 09:37:46",
         "depth": 2,
-        "id": 6,
         "idCollectionTypes": 2,
         "idCollectionsMetaDefault": 10,
         "idCollectionsParent": 4,
@@ -90,11 +78,9 @@
         "style": ""
     },
     {
-        "changed": "2025-12-09 10:36:03",
         "collection_key": "",
         "created": "2025-12-09 10:36:03",
         "depth": 0,
-        "id": 7,
         "idCollectionTypes": 1,
         "idCollectionsMetaDefault": 12,
         "idCollectionsParent": "",

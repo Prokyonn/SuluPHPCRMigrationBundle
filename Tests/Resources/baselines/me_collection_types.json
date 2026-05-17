@@ -2,13 +2,11 @@
     {
         "collection_type_key": "collection.default",
         "description": "",
-        "id": 1,
         "name": "Default"
     },
     {
         "collection_type_key": "collection.system",
         "description": "",
-        "id": 2,
         "name": "System Collections"
     }
 ]

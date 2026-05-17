@@ -1,7 +1,6 @@
 [
     {
         "defaultLocale": "en",
-        "id": 1,
         "resourceId": "786eedc0-e161-4fa4-871d-8a5765442dfd",
         "resourceKey": "pages",
         "resourceSecurityContext": "sulu.webspaces.website",
@@ -27,9 +26,7 @@
                         "blocks": [
                             {
                                 "type": "text",
-                                "image": {
-                                    "id": null
-                                },
+                                "image": [],
                                 "title": "Lorem Ipsum",
                                 "settings": [],
                                 "description": "<p>Anim cillum aliqua laborum do sint laborum. Non aliquip aliqua cillum fugiat magna non nulla in laboris culpa fugiat quis. Dolore est in esse pariatur reprehenderit sit Lorem sunt duis ad magna ad. In deserunt ipsum eu reprehenderit sit adipisicing magna anim in exercitation ex velit aliqua ad non. Excepteur id cupidatat exercitation aliquip fugiat magna ea id esse dolore. Voluptate magna sunt proident ipsum deserunt sint quis sit mollit. Amet ex laborum consequat ipsum nostrud exercitation et mollit ipsum commodo amet.</p>"
@@ -89,7 +86,6 @@
                                     {
                                         "type": "inner_image",
                                         "image": {
-                                            "id": 4,
                                             "displayOption": null
                                         },
                                         "caption": "Aute aute elit velit est ipsum est in.",
@@ -100,9 +96,7 @@
                         ],
                         "article": "<p>Anim cillum aliqua laborum do sint laborum. Non aliquip aliqua cillum fugiat magna non nulla in laboris culpa fugiat quis. Dolore est in esse pariatur reprehenderit sit Lorem sunt duis ad magna ad. In deserunt ipsum eu reprehenderit sit adipisicing magna anim in exercitation ex velit aliqua ad non. Excepteur id cupidatat exercitation aliquip fugiat magna ea id esse dolore. Voluptate magna sunt proident ipsum deserunt sint quis sit mollit. Amet ex laborum consequat ipsum nostrud exercitation et mollit ipsum commodo amet.</p>",
                         "subtitle": "Example subtitle",
-                        "headerImage": {
-                            "id": 3
-                        },
+                        "headerImage": [],
                         "relatedPages": [
                             "db367f2b-7e1d-42e0-8ea2-b39b3d7511bf"
                         ],
@@ -152,7 +146,6 @@
     },
     {
         "defaultLocale": "de",
-        "id": 2,
         "resourceId": "16060395-4bbf-4e1d-9c8e-fe5265890c99",
         "resourceKey": "pages",
         "resourceSecurityContext": "sulu.webspaces.website",
@@ -178,9 +171,7 @@
                         "blocks": [
                             {
                                 "type": "text",
-                                "image": {
-                                    "id": null
-                                },
+                                "image": [],
                                 "title": "Lorem Ipsum",
                                 "settings": [],
                                 "description": "<p>Anim cillum aliqua laborum do sint laborum. Non aliquip aliqua cillum fugiat magna non nulla in laboris culpa fugiat quis. Dolore est in esse pariatur reprehenderit sit Lorem sunt duis ad magna ad. In deserunt ipsum eu reprehenderit sit adipisicing magna anim in exercitation ex velit aliqua ad non. Excepteur id cupidatat exercitation aliquip fugiat magna ea id esse dolore. Voluptate magna sunt proident ipsum deserunt sint quis sit mollit. Amet ex laborum consequat ipsum nostrud exercitation et mollit ipsum commodo amet.</p>"
@@ -240,7 +231,6 @@
                                     {
                                         "type": "inner_image",
                                         "image": {
-                                            "id": 4,
                                             "displayOption": null
                                         },
                                         "caption": "Aute aute elit velit est ipsum est in.",
@@ -251,9 +241,7 @@
                         ],
                         "article": "<p>Anim cillum aliqua laborum do sint laborum. Non aliquip aliqua cillum fugiat magna non nulla in laboris culpa fugiat quis. Dolore est in esse pariatur reprehenderit sit Lorem sunt duis ad magna ad. In deserunt ipsum eu reprehenderit sit adipisicing magna anim in exercitation ex velit aliqua ad non. Excepteur id cupidatat exercitation aliquip fugiat magna ea id esse dolore. Voluptate magna sunt proident ipsum deserunt sint quis sit mollit. Amet ex laborum consequat ipsum nostrud exercitation et mollit ipsum commodo amet.</p>",
                         "subtitle": "Example subtitle",
-                        "headerImage": {
-                            "id": 3
-                        },
+                        "headerImage": [],
                         "relatedPages": [
                             "db367f2b-7e1d-42e0-8ea2-b39b3d7511bf"
                         ],
@@ -303,7 +291,6 @@
     },
     {
         "defaultLocale": "de",
-        "id": 3,
         "resourceId": "3b18b1d6-d13a-4d51-8cea-45e2132ad5a5",
         "resourceKey": "pages",
         "resourceSecurityContext": "sulu.webspaces.website",
@@ -329,9 +316,7 @@
                         "blocks": [],
                         "article": "",
                         "subtitle": "",
-                        "headerImage": {
-                            "id": null
-                        },
+                        "headerImage": [],
                         "relatedPages": [],
                         "sidebarSnippet": null
                     },
@@ -377,7 +362,6 @@
     },
     {
         "defaultLocale": "de",
-        "id": 4,
         "resourceId": "1b328681-4fc7-42fe-8c0c-3c14c48a0aeb",
         "resourceKey": "pages",
         "resourceSecurityContext": "sulu.webspaces.website",
@@ -403,9 +387,7 @@
                         "blocks": [],
                         "article": "",
                         "subtitle": "",
-                        "headerImage": {
-                            "id": null
-                        },
+                        "headerImage": [],
                         "relatedPages": [],
                         "sidebarSnippet": null
                     },

@@ -1,12 +1,10 @@
 [
     {
         "apiKey": "9cef63ce0eca59e51fb6b00e901be267",
-        "changed": "2026-05-07 12:53:38",
         "confirmationKey": "",
         "created": "2025-12-09 09:37:46",
         "email": "admin@example.com",
         "enabled": 1,
-        "id": 1,
         "idContacts": 1,
         "idUsersChanger": 1,
         "idUsersCreator": "",

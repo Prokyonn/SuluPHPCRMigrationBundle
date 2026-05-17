@@ -1,11 +1,9 @@
 [
     {
-        "changed": "2025-12-09 10:36:17",
         "created": "2025-12-09 10:36:17",
         "downloadCounter": 0,
         "focusPointX": "",
         "focusPointY": "",
-        "id": 1,
         "idFileVersionsMetaDefault": 1,
         "idFiles": 1,
         "idUsersChanger": 1,
@@ -25,12 +23,10 @@
         "version": 1
     },
     {
-        "changed": "2025-12-09 10:36:17",
         "created": "2025-12-09 10:36:17",
         "downloadCounter": 0,
         "focusPointX": "",
         "focusPointY": "",
-        "id": 2,
         "idFileVersionsMetaDefault": 2,
         "idFiles": 2,
         "idUsersChanger": 1,
@@ -50,12 +46,10 @@
         "version": 1
     },
     {
-        "changed": "2025-12-09 10:36:17",
         "created": "2025-12-09 10:36:17",
         "downloadCounter": 0,
         "focusPointX": "",
         "focusPointY": "",
-        "id": 3,
         "idFileVersionsMetaDefault": 3,
         "idFiles": 3,
         "idUsersChanger": 1,
@@ -75,12 +69,10 @@
         "version": 1
     },
     {
-        "changed": "2025-12-09 10:36:17",
         "created": "2025-12-09 10:36:17",
         "downloadCounter": 0,
         "focusPointX": "",
         "focusPointY": "",
-        "id": 4,
         "idFileVersionsMetaDefault": 4,
         "idFiles": 4,
         "idUsersChanger": 1,
@@ -100,12 +92,10 @@
         "version": 1
     },
     {
-        "changed": "2025-12-09 10:36:18",
         "created": "2025-12-09 10:36:18",
         "downloadCounter": 0,
         "focusPointX": "",
         "focusPointY": "",
-        "id": 5,
         "idFileVersionsMetaDefault": 5,
         "idFiles": 5,
         "idUsersChanger": 1,

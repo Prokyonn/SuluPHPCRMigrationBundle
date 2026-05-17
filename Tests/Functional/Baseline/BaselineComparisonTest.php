@@ -160,8 +160,6 @@ class BaselineComparisonTest extends KernelTestCase
         $this->assertTableMatchesBaseline($table);
     }
 
-    private const EXCLUDED_FIELDS = ['_id', 'id', 'uuid', 'changed'];
-
     private function assertTableMatchesBaseline(string $table): void
     {
         if (null === self::$tempDir) {
@@ -229,7 +227,7 @@ class BaselineComparisonTest extends KernelTestCase
         }
 
         $rows = \array_map(
-            fn (array $row): array => $this->normalizeRow($this->removeExcludedFields($row)),
+            fn (array $row): array => $this->normalizeRow($row),
             $data
         );
 
@@ -287,32 +285,5 @@ class BaselineComparisonTest extends KernelTestCase
         \ksort($normalized);
 
         return $normalized;
-    }
-
-    /**
-     * @param array<string|int, mixed> $data
-     *
-     * @return array<string|int, mixed>
-     */
-    private function removeExcludedFields(array $data): array
-    {
-        $result = [];
-        foreach ($data as $key => $value) {
-            $keyStr = (string) $key;
-            // Exclude specific fields and foreign key columns (ending with _id)
-            if (\in_array($keyStr, self::EXCLUDED_FIELDS, true) || \str_ends_with($keyStr, '_id')) {
-                continue;
-            }
-            if (\is_array($value)) {
-                $result[$key] = $this->removeExcludedFields($value);
-            } elseif (\is_string($value) && ('{' === ($value[0] ?? '') || '[' === ($value[0] ?? ''))) {
-                $decoded = \json_decode($value, true);
-                $result[$key] = \is_array($decoded) ? $this->removeExcludedFields($decoded) : $value;
-            } else {
-                $result[$key] = $value;
-            }
-        }
-
-        return $result;
     }
 }

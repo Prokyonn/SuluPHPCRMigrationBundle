@@ -1,24 +1,20 @@
 [
     {
-        "id": 1,
         "locale": "en",
         "title": "Example Page 2",
         "trashItemId": 1
     },
     {
-        "id": 2,
         "locale": "de",
         "title": "Example Page 1",
         "trashItemId": 2
     },
     {
-        "id": 3,
         "locale": "de",
         "title": "Child Page 1 with external link",
         "trashItemId": 3
     },
     {
-        "id": 4,
         "locale": "de",
         "title": "Child page 2 with internal link",
         "trashItemId": 4

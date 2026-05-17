@@ -1,9 +1,7 @@
 [
     {
-        "changed": "2025-12-09 10:36:47",
         "created": "2025-12-09 10:36:47",
         "description": "",
-        "id": 1,
         "idCategories": 1,
         "idUsersChanger": 1,
         "idUsersCreator": 1,
@@ -11,10 +9,8 @@
         "translation": "Root"
     },
     {
-        "changed": "2025-12-09 10:36:56",
         "created": "2025-12-09 10:36:56",
         "description": "",
-        "id": 2,
         "idCategories": 2,
         "idUsersChanger": 1,
         "idUsersCreator": 1,
@@ -22,10 +18,8 @@
         "translation": "Child-1"
     },
     {
-        "changed": "2025-12-09 10:37:03",
         "created": "2025-12-09 10:37:03",
         "description": "",
-        "id": 3,
         "idCategories": 3,
         "idUsersChanger": 1,
         "idUsersCreator": 1,
@@ -33,10 +27,8 @@
         "translation": "Child-2"
     },
     {
-        "changed": "2025-12-09 10:37:44",
         "created": "2025-12-09 10:37:17",
         "description": "",
-        "id": 4,
         "idCategories": 4,
         "idUsersChanger": 1,
         "idUsersCreator": 1,

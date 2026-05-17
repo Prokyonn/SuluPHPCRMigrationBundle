@@ -1,9 +1,7 @@
 [
     {
         "anonymous": 0,
-        "changed": "2025-12-09 09:37:46",
         "created": "2025-12-09 09:37:46",
-        "id": 1,
         "idSecurityTypes": "",
         "idUsersChanger": "",
         "idUsersCreator": "",
@@ -13,9 +11,7 @@
     },
     {
         "anonymous": 1,
-        "changed": "2025-12-09 10:52:26",
         "created": "2025-12-09 10:52:26",
-        "id": 2,
         "idSecurityTypes": "",
         "idUsersChanger": "",
         "idUsersCreator": "",
