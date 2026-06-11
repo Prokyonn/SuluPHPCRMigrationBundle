@@ -160,6 +160,66 @@ class BaselineComparisonTest extends KernelTestCase
         $this->assertTableMatchesBaseline($table);
     }
 
+    /**
+     * A shadow locale must resolve and publish under its own URL. That requires its
+     * dimension content to reference a route of its OWN locale (or no route at all) —
+     * never the shadow-base locale's route, and never a dangling route id.
+     *
+     * The baseline comparison cannot guard this: it strips every `*_id` column,
+     * `route_id` included. So we assert the linkage invariant directly against the DB.
+     */
+    public function testShadowDimensionContentsLinkToOwnLocaleRoute(): void
+    {
+        /** @var Connection $connection */
+        $connection = self::getContainer()->get('doctrine.dbal.default_connection');
+
+        $rows = $connection->executeQuery(
+            <<<'SQL'
+                SELECT d.id, d.locale, d.stage, d.shadowLocale, d.route_id,
+                       r.locale AS route_locale, r.slug
+                FROM pa_page_dimension_contents d
+                LEFT JOIN ro_routes r ON r.id = d.route_id
+                WHERE d.shadowLocale IS NOT NULL AND d.shadowLocale <> ''
+                SQL
+        )->fetchAllAssociative();
+
+        $this->assertNotEmpty($rows, 'Expected shadow dimension-contents in the fixtures to validate the invariant.');
+
+        $describe = static fn (mixed $value): string => \is_scalar($value) ? (string) $value : 'DANGLING';
+
+        $violations = [];
+        foreach ($rows as $row) {
+            // No route is acceptable — the maintainer can still resolve/publish it in the admin.
+            if (null === $row['route_id']) {
+                continue;
+            }
+
+            // route_locale is NULL when route_id dangles (LEFT JOIN found no route).
+            if (($row['route_locale'] ?? null) !== $row['locale']) {
+                $violations[] = \sprintf(
+                    'dimension_content id=%s locale=%s stage=%s shadowLocale=%s -> route_id=%s (route locale=%s slug=%s)',
+                    $describe($row['id']),
+                    $describe($row['locale']),
+                    $describe($row['stage']),
+                    $describe($row['shadowLocale']),
+                    $describe($row['route_id']),
+                    $describe($row['route_locale']),
+                    $describe($row['slug']),
+                );
+            }
+        }
+
+        $this->assertSame(
+            [],
+            $violations,
+            \sprintf(
+                "Shadow dimension-contents must link to a route of their own locale (or none).\nFound %d mislinked/dangling row(s):\n%s",
+                \count($violations),
+                \implode("\n", $violations),
+            ),
+        );
+    }
+
     private const EXCLUDED_FIELDS = ['_id', 'id', 'uuid', 'changed'];
 
     private function assertTableMatchesBaseline(string $table): void

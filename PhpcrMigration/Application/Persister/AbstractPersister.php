@@ -39,6 +39,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  *         _route?: array<string, mixed>,
  *         _history_urls?: string[],
  *         _url?: ?string,
+ *         'shadow-on'?: bool,
+ *         'shadow-base'?: string,
  *         mainWebspace?: string,
  *         additionalWebspaces?: string[],
  *     }>
@@ -433,6 +435,7 @@ abstract class AbstractPersister implements PersisterInterface
          *     state?: int,
          *     'shadow-on'?: bool,
          *     'shadow-base'?: string,
+         *     _route?: array<string, mixed>,
          * } $localizedData
          * @var string $locale
          */
@@ -468,11 +471,21 @@ abstract class AbstractPersister implements PersisterInterface
                 }
 
                 if ($isShadow && \is_string($shadowBase) && isset($localizations[$shadowBase]['template'])) {
+                    // A shadow takes the source locale's content, but must keep its OWN route so it
+                    // stays resolvable and publishable under its own locale. Copying the source's
+                    // `_route` would link the shadow to a different-locale route. Fall back to the
+                    // source's route only when this locale has none — the `[route_id] <- [_route][id]`
+                    // mapping cannot traverse a null/absent `_route`.
+                    $ownRoute = $localizedData['_route'] ?? null;
+
                     $sourceData = $localizations[$shadowBase];
                     $sourceData['shadow-on'] = $isShadow;
                     $sourceData['shadow-base'] = $shadowBase;
                     $sourceData['state'] = $localizedData['state'] ?? $sourceData['state'];
                     $localizedData = $sourceData;
+                    if (null !== $ownRoute) {
+                        $localizedData['_route'] = $ownRoute;
+                    }
                     $localizedData['_seoData'] = $this->buildSeoData($localizedData);
                     $localizedData['_excerptData'] = $this->buildExcerptData($localizedData);
                 }
@@ -656,7 +669,22 @@ abstract class AbstractPersister implements PersisterInterface
             $resourceId = $document['jcr']['uuid'];
             $resourceKey = $this->getEntityResourceKey();
 
-            $slug = $this->getSlug($document, $locale);
+            // A shadow locale has no resource locator of its own — its URL follows the
+            // shadow-base locale. Resolve the slug from the source so the shadow still gets
+            // an own-locale route (its own 2.x resource locator is a stale copy that collides
+            // and gets skipped, leaving the shadow route-less). Guard on the source template
+            // so getSlug() never dereferences a missing locale.
+            $slugLocale = $locale;
+            $shadowBase = $localizedData['shadow-base'] ?? null;
+            if (
+                ($localizedData['shadow-on'] ?? false)
+                && \is_string($shadowBase)
+                && isset($localizations[$shadowBase]['template'])
+            ) {
+                $slugLocale = $shadowBase;
+            }
+
+            $slug = $this->getSlug($document, $slugLocale);
             if (null === $slug) {
                 continue;
             }
