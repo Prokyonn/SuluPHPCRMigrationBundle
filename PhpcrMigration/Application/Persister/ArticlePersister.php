@@ -13,6 +13,7 @@ namespace Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Persister;
 
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Exception\TitleTooLongException;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Repository\EntityRepositoryInterface;
+use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Service\RouteCollisionCollector;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
@@ -28,10 +29,11 @@ class ArticlePersister extends AbstractPersister
     public function __construct(
         PropertyAccessorInterface $propertyAccessor,
         EntityRepositoryInterface $entityRepository,
+        RouteCollisionCollector $routeCollisionCollector,
         private readonly array $defaultMainWebspaceMap = [],
         private readonly array $defaultAdditionalWebspacesMap = [],
     ) {
-        parent::__construct($propertyAccessor, $entityRepository);
+        parent::__construct($propertyAccessor, $entityRepository, $routeCollisionCollector);
     }
 
     protected function removeNonTemplateData(array $data): array

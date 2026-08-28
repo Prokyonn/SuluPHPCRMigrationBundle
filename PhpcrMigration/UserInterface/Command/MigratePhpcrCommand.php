@@ -23,6 +23,7 @@ use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Persister\Persis
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Query\PostMigrationQueryInterface;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Repository\EntityRepositoryInterface;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Service\DryRunCollector;
+use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Service\RouteCollisionCollector;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Session\SessionManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -62,6 +63,7 @@ class MigratePhpcrCommand extends Command
         private readonly Connection $connection,
         private readonly EntityRepositoryInterface $entityRepository,
         private readonly DryRunCollector $dryRunCollector,
+        private readonly RouteCollisionCollector $routeCollisionCollector,
         private readonly string $projectDir,
     ) {
         parent::__construct();
@@ -195,8 +197,12 @@ class MigratePhpcrCommand extends Command
             $io->newLine();
 
             $reportPath = $this->resolveReportPath($input);
-            $this->writeReport($this->dryRunCollector->toArray(), $reportPath);
+            $this->writeReport(
+                $this->dryRunCollector->toArray() + ['routeCollisions' => $this->routeCollisionCollector->all()],
+                $reportPath,
+            );
             $this->dryRunCollector->printSummary($io);
+            $this->routeCollisionCollector->printSummary($io);
             $io->writeln(\sprintf('Report written to: %s', $reportPath));
 
             return Command::SUCCESS;
@@ -206,6 +212,7 @@ class MigratePhpcrCommand extends Command
             $query->execute($this->connection);
         }
 
+        $this->routeCollisionCollector->printSummary($io);
         $io->success('Migration completed');
 
         return Command::SUCCESS;

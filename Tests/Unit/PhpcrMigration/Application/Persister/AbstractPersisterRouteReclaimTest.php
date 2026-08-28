@@ -21,6 +21,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Persister\AbstractPersister;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Persister\PagePersister;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Repository\EntityRepositoryInterface;
+use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Service\RouteCollisionCollector;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 #[CoversClass(AbstractPersister::class)]
@@ -44,6 +45,7 @@ final class AbstractPersisterRouteReclaimTest extends TestCase
         $this->persister = new PagePersister(
             PropertyAccess::createPropertyAccessor(),
             $this->repository->reveal(),
+            new RouteCollisionCollector(),
         );
     }
 

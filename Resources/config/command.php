@@ -29,6 +29,7 @@ return static function(ContainerConfigurator $container) {
             new Reference('doctrine.dbal.default_connection'),
             new Reference('sulu_phpcr_migration.entity_repository'),
             new Reference('sulu_phpcr_migration.dry_run_collector'),
+            new Reference('sulu_phpcr_migration.route_collision_collector'),
             '%kernel.project_dir%',
         ])
         ->tag('console.command');

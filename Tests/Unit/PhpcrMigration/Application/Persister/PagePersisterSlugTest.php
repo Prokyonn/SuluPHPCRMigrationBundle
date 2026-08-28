@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Persister\PagePersister;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Repository\EntityRepositoryInterface;
+use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Service\RouteCollisionCollector;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 #[CoversClass(PagePersister::class)]
@@ -31,6 +32,7 @@ final class PagePersisterSlugTest extends TestCase
         $persister = new PagePersister(
             PropertyAccess::createPropertyAccessor(),
             $repository->reveal(),
+            new RouteCollisionCollector(),
         );
 
         // Malformed data: each locale is a shadow of the other. Without a visited-set guard this

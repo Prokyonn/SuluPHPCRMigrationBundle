@@ -17,6 +17,7 @@ use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Exception\Invali
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Exception\SlugTooLongException;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Exception\UnsupportedDocumentTypeException;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Repository\EntityRepositoryInterface;
+use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Service\RouteCollisionCollector;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
@@ -66,6 +67,7 @@ abstract class AbstractPersister implements PersisterInterface
     public function __construct(
         protected PropertyAccessorInterface $propertyAccessor,
         protected EntityRepositoryInterface $entityRepository,
+        protected RouteCollisionCollector $routeCollisionCollector,
     ) {
     }
 
@@ -709,8 +711,8 @@ abstract class AbstractPersister implements PersisterInterface
             );
 
             // Unique (webspace, locale, slug): on a collision the published document wins by
-            // reclaiming the slug while a draft yields. After the history cleanup so reclaiming
-            // a history slug still works.
+            // reclaiming the slug while a draft moves to a suffixed slug. After the history cleanup
+            // so reclaiming a history slug still works.
             $conflictingRoute = $this->entityRepository->findOneBy(self::ROUTE_TABLE, [
                 'webspace' => $webspace,
                 'locale' => $locale,
@@ -742,18 +744,21 @@ abstract class AbstractPersister implements PersisterInterface
                     }
                     $this->entityRepository->removeBy(self::ROUTE_TABLE, ['id' => $conflictingRoute['id']]);
                 } else {
+                    // Sulu 3.0 requires a route for every page locale, so the losing document keeps
+                    // one under the next free "<slug>-<n>", the same rule Sulu's ResourceLocatorGenerator applies.
                     $ownerKey = $conflictingRoute['resource_key'] ?? null;
                     $ownerId = $conflictingRoute['resource_id'] ?? null;
-                    echo \sprintf(
-                        "Skipping route for document '%s' (locale '%s'): slug '%s' is already used by '%s::%s'.\n",
+                    $freeSlug = $this->findFreeSlug($webspace, $locale, $slug, $resourceKey, $resourceId);
+                    $this->routeCollisionCollector->record(
+                        $resourceKey,
                         $resourceId,
                         $locale,
                         $slug,
+                        $freeSlug,
                         \is_string($ownerKey) ? $ownerKey : '?',
                         \is_string($ownerId) ? $ownerId : '?',
                     );
-
-                    continue;
+                    $slug = $data['slug'] = $freeSlug;
                 }
             }
 
@@ -837,6 +842,36 @@ abstract class AbstractPersister implements PersisterInterface
         }
 
         return $routes;
+    }
+
+    private function findFreeSlug(?string $webspace, string $locale, string $slug, string $resourceKey, string $resourceId): string
+    {
+        $candidate = $slug;
+        $suffix = 0;
+
+        while (true) {
+            $route = $this->entityRepository->findOneBy(self::ROUTE_TABLE, [
+                'webspace' => $webspace,
+                'locale' => $locale,
+                'slug' => $candidate,
+            ]);
+
+            // Free, or already ours from a previous run.
+            if (
+                null === $route
+                || (($route['resource_id'] ?? null) === $resourceId && ($route['resource_key'] ?? null) === $resourceKey)
+            ) {
+                break;
+            }
+
+            $candidate = $slug . '-' . ++$suffix;
+        }
+
+        if (\strlen($candidate) > SlugTooLongException::MAX_LENGTH) {
+            throw new SlugTooLongException($candidate, $resourceId, $locale);
+        }
+
+        return $candidate;
     }
 
     /**

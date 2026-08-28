@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Service\DryRunCollector;
+use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Application\Service\RouteCollisionCollector;
 use Sulu\Bundle\PhpcrMigrationBundle\PhpcrMigration\Infrastructure\Repository\EntityRepository;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -21,6 +22,8 @@ return static function(ContainerConfigurator $container) {
     $services = $container->services();
 
     $services->set('sulu_phpcr_migration.dry_run_collector', DryRunCollector::class);
+
+    $services->set('sulu_phpcr_migration.route_collision_collector', RouteCollisionCollector::class);
 
     $services->set('sulu_phpcr_migration.entity_repository', EntityRepository::class)
         ->args([
