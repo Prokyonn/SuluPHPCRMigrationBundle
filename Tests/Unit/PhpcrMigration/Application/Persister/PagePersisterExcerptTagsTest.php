@@ -33,7 +33,7 @@ final class PagePersisterExcerptTagsTest extends TestCase
         $repository->exists('ta_tags', ['id' => 1])->willReturn(true);
         $repository->exists('ta_tags', ['id' => 2])->willReturn(false);
 
-        $persister = new PagePersister(PropertyAccess::createPropertyAccessor(), $repository->reveal(), '3.0.9');
+        $persister = new PagePersister(PropertyAccess::createPropertyAccessor(), $repository->reveal());
 
         (new \ReflectionMethod(PagePersister::class, 'insertOrUpdateExcerptTags'))->invoke(
             $persister,
